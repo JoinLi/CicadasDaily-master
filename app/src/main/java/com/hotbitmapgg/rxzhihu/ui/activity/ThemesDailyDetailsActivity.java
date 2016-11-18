@@ -40,8 +40,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by hcc on 16/4/4.
  */
-public class ThemesDailyDetailsActivity extends AbsBaseActivity
-{
+public class ThemesDailyDetailsActivity extends AbsBaseActivity {
 
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
@@ -69,18 +68,14 @@ public class ThemesDailyDetailsActivity extends AbsBaseActivity
 
 
     @Override
-    public int getLayoutId()
-    {
-
+    public int getLayoutId() {
         return R.layout.activity_type_daily;
     }
 
     @Override
-    public void initViews(Bundle savedInstanceState)
-    {
+    public void initViews(Bundle savedInstanceState) {
         Intent intent = getIntent();
-        if (intent != null)
-        {
+        if (intent != null) {
             id = intent.getIntExtra(EXTRA_TYPE, -1);
         }
 
@@ -88,16 +83,13 @@ public class ThemesDailyDetailsActivity extends AbsBaseActivity
         startGetThemesDetails();
     }
 
-    private void startGetThemesDetails()
-    {
+    private void startGetThemesDetails() {
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
-        {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
-            public void onRefresh()
-            {
+            public void onRefresh() {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -107,38 +99,31 @@ public class ThemesDailyDetailsActivity extends AbsBaseActivity
         getThemesDetails();
     }
 
-    private void getThemesDetails()
-    {
+    private void getThemesDetails() {
 
         RetrofitHelper.builder().getThemesDetailsById(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<ThemesDetails>()
-                {
+                .subscribe(new Action1<ThemesDetails>() {
 
                     @Override
-                    public void call(ThemesDetails themesDetails)
-                    {
+                    public void call(ThemesDetails themesDetails) {
 
-                        if (themesDetails != null)
-                        {
+                        if (themesDetails != null) {
                             finishGetThemesDetails(themesDetails);
                         }
                     }
-                }, new Action1<Throwable>()
-                {
+                }, new Action1<Throwable>() {
 
                     @Override
-                    public void call(Throwable throwable)
-                    {
+                    public void call(Throwable throwable) {
 
                         LogUtil.all("加载数据失败");
                     }
                 });
     }
 
-    private void finishGetThemesDetails(ThemesDetails themesDetails)
-    {
+    private void finishGetThemesDetails(ThemesDetails themesDetails) {
 
         stories.addAll(themesDetails.getStories());
         editors.addAll(themesDetails.getEditors());
@@ -152,24 +137,20 @@ public class ThemesDailyDetailsActivity extends AbsBaseActivity
         mHeaderViewRecyclerAdapter = new HeaderViewRecyclerAdapter(mAdapter);
         addHeadView(themesDetails);
         mRecyclerView.setAdapter(mHeaderViewRecyclerAdapter);
-        mAdapter.setOnItemClickListener(new AbsRecyclerViewAdapter.OnItemClickListener()
-        {
+        mAdapter.setOnItemClickListener(new AbsRecyclerViewAdapter.OnItemClickListener() {
 
             @Override
-            public void onItemClick(int position, AbsRecyclerViewAdapter.ClickableViewHolder holder)
-            {
+            public void onItemClick(int position, AbsRecyclerViewAdapter.ClickableViewHolder holder) {
 
                 Stories stories = ThemesDailyDetailsActivity.this.stories.get(position);
                 DailyDetailActivity.lanuch(ThemesDailyDetailsActivity.this, stories.getId());
             }
         });
 
-        new Handler().postDelayed(new Runnable()
-        {
+        new Handler().postDelayed(new Runnable() {
 
             @Override
-            public void run()
-            {
+            public void run() {
 
                 mCircleProgressView.setVisibility(View.GONE);
                 mCircleProgressView.stopSpinning();
@@ -178,8 +159,7 @@ public class ThemesDailyDetailsActivity extends AbsBaseActivity
         }, 3000);
     }
 
-    private void addHeadView(ThemesDetails themesDetails)
-    {
+    private void addHeadView(ThemesDetails themesDetails) {
 
         View headView = LayoutInflater.from(ThemesDailyDetailsActivity.this).inflate(R.layout.layout_themes_details_head, mRecyclerView, false);
         ImageView mThemesBg = (ImageView) headView.findViewById(R.id.type_image);
@@ -193,12 +173,10 @@ public class ThemesDailyDetailsActivity extends AbsBaseActivity
         mHeadRecycle.setLayoutManager(mLinearLayoutManager);
         ThemesDetailsHeadAdapter mHeadAdapter = new ThemesDetailsHeadAdapter(mHeadRecycle, editors);
         mHeadRecycle.setAdapter(mHeadAdapter);
-        mHeadAdapter.setOnItemClickListener(new AbsRecyclerViewAdapter.OnItemClickListener()
-        {
+        mHeadAdapter.setOnItemClickListener(new AbsRecyclerViewAdapter.OnItemClickListener() {
 
             @Override
-            public void onItemClick(int position, AbsRecyclerViewAdapter.ClickableViewHolder holder)
-            {
+            public void onItemClick(int position, AbsRecyclerViewAdapter.ClickableViewHolder holder) {
 
                 Editors editor = ThemesDailyDetailsActivity.this.editors.get(position);
                 int id = editor.getId();
@@ -213,8 +191,7 @@ public class ThemesDailyDetailsActivity extends AbsBaseActivity
     }
 
     @Override
-    public void initToolBar()
-    {
+    public void initToolBar() {
         setSupportActionBar(mToolbar);
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null)
@@ -222,19 +199,16 @@ public class ThemesDailyDetailsActivity extends AbsBaseActivity
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId() == android.R.id.home)
-        {
+        if (item.getItemId() == android.R.id.home) {
             onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
 
 
-    public static void Luanch(Activity activity, int id)
-    {
+    public static void Luanch(Activity activity, int id) {
 
         Intent mIntent = new Intent(activity, ThemesDailyDetailsActivity.class);
         mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
