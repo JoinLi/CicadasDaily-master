@@ -1,5 +1,7 @@
 # 知了日报
 
+这个开源项目对于我来说帮助很大，感谢原作者
+
 A pure MaterialDesign style reading App & 一个MaterialDesign风格纯粹阅读的App.
 
 ![](https://github.com/HotBitmapGG/RxZhiHu/blob/master/art/icon.png?raw=true)
